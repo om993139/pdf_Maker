@@ -18,10 +18,8 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.material.Divider
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Info
 import androidx.compose.material.icons.filled.Menu
@@ -29,7 +27,6 @@ import androidx.compose.material.icons.filled.Settings
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExtendedFloatingActionButton
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.ModalDrawerSheet
@@ -54,9 +51,10 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.pdfmaker.R
-import com.example.pdfmaker.R.drawable.reduce_image
 import com.example.pdfmaker.data.models.PdfEntity
+import com.example.pdfmaker.ui.navigation.Routs
 import com.example.pdfmaker.ui.screens.common.ErrorScreen
 import com.example.pdfmaker.ui.screens.common.LoadingDialog
 import com.example.pdfmaker.ui.screens.home.components.PdfLayout
@@ -79,7 +77,7 @@ import java.util.UUID
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 
-fun HomeScreen(pdfViewModel: PdfViewModel) {
+fun HomeScreen(pdfViewModel: PdfViewModel, navController: NavHostController) {
 
     LoadingDialog(pdfViewModel = pdfViewModel)
     RenameDeleteDialog(pdfViewModel = pdfViewModel)
@@ -165,12 +163,7 @@ fun HomeScreen(pdfViewModel: PdfViewModel) {
     }
 
 
-
-
-
-
-
-    ModalNavigationDrawer(
+    androidx.compose.material3.ModalNavigationDrawer(
         drawerState = drawerState,
         gesturesEnabled = true,
         drawerContent = {
@@ -181,9 +174,9 @@ fun HomeScreen(pdfViewModel: PdfViewModel) {
                         .width(300.dp)
                         .padding(20.dp)
                 ) {
-                   Image(
-                       painter = painterResource(id = R.drawable.logo_brand1),
-                       contentDescription = "App Logo",
+                    Image(
+                        painter = painterResource(id = R.drawable.logo_brand1),
+                        contentDescription = "App Logo",
                         modifier = Modifier
                             .size(100.dp)
                             .align(Alignment.CenterHorizontally)
@@ -192,10 +185,26 @@ fun HomeScreen(pdfViewModel: PdfViewModel) {
                     )
                     Spacer(modifier = Modifier.height(16.dp))
                     //HorizontalDivider()
+                    NavigationDrawerItem(
+                        label = { Text("Home") },
+                        selected = true,
+                        icon = {
+                            Icon(
+                                imageVector = Icons.Default.Home,
+                                contentDescription = "Home"
+                            )
+                        },
+                        onClick = {
+                            navController.navigate(Routs.Home)
+                            coroutineScope.launch {
+                                drawerState.close()
+                            }
+                        }
+                    )
 
                     NavigationDrawerItem(
                         label = { Text("Reduced Image Size") },
-                        selected = true,
+                        selected = false,
                         icon = {
                             Icon(
                                 imageVector = Icons.Default.Edit,
@@ -203,6 +212,7 @@ fun HomeScreen(pdfViewModel: PdfViewModel) {
                             )
                         },
                         onClick = {
+                            navController.navigate(Routs.ImageReduceder)
                             coroutineScope.launch {
                                 drawerState.close()
                             }
@@ -353,6 +363,7 @@ fun HomeScreen(pdfViewModel: PdfViewModel) {
 
 
         }
+
     }
 }
 

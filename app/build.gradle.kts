@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsKotlinAndroid)
     id("kotlin-kapt")
+    kotlin("plugin.serialization") version "2.0.0"
+
 }
 
 android {
@@ -53,7 +55,6 @@ android {
 dependencies {
 
 
-    implementation(libs.androidx.navigation.compose)
     val room_version = "2.6.1"
 
     implementation("androidx.room:room-runtime:$room_version")
@@ -105,4 +106,20 @@ dependencies {
     implementation ("androidx.compose.material:material:1.6.8")
     implementation ("androidx.compose.ui:ui:1.6.8")
     implementation ("androidx.compose.ui:ui-tooling-preview:1.4.3")
+
+
+
+    // Navigation
+    implementation("androidx.navigation:navigation-compose:2.8.0-beta01")
+
+    // Serialization
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+
+
+    implementation("io.coil-kt:coil:2.6.0")
+
+    implementation("io.coil-kt:coil-compose:2.0.0")
+
+
+
 }
