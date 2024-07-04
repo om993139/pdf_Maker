@@ -62,7 +62,6 @@ import java.util.Locale
 import coil.compose.rememberAsyncImagePainter
 
 
-
 @OptIn(ExperimentalMaterial3Api::class)
 @RequiresApi(Build.VERSION_CODES.TIRAMISU)
 @Composable
@@ -71,7 +70,6 @@ fun ImageResizer(viewModel: MainViewModel = viewModel(), navController: NavHostC
     val imageUri by viewModel.imageUri.collectAsState()
     val compressionLevel by viewModel.compressionLevel.collectAsState()
     val status by viewModel.status.collectAsState()
-
 
 
     val imagePickerLauncher = rememberLauncherForActivityResult(
@@ -109,12 +107,12 @@ fun ImageResizer(viewModel: MainViewModel = viewModel(), navController: NavHostC
                     }) {
                         Icon(imageVector = Icons.Default.ArrowBack, contentDescription = "back")
                     }
-            }
+                }
 
             )
         }
 
-    ) {innerPadding ->
+    ) { innerPadding ->
 
 
         Column(
@@ -190,7 +188,6 @@ fun ImageResizer(viewModel: MainViewModel = viewModel(), navController: NavHostC
 }
 
 
-
 class MainViewModel : ViewModel() {
     private val _imageUri = MutableStateFlow<Uri?>(null)
     val imageUri: StateFlow<Uri?> = _imageUri.asStateFlow()
@@ -200,9 +197,6 @@ class MainViewModel : ViewModel() {
 
     private val _status = MutableStateFlow("")
     val status: StateFlow<String> = _status.asStateFlow()
-
-
-
 
 
     fun setImageUri(uri: Uri) {
@@ -238,16 +232,22 @@ class MainViewModel : ViewModel() {
             val bitmap = BitmapFactory.decodeStream(inputStream)
 
             // Generate unique file name
-            val timeStamp = SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.getDefault()).format(Date())
+            val timeStamp =
+                SimpleDateFormat("yyyy-MM-dd_HH-mm-ss", Locale.getDefault()).format(Date())
             val fileName = "compressed_image_$timeStamp.jpg"
 
             // Save compressed image to external storage directory
-            val fileDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
+            val fileDir =
+                Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES)
             val file = File(fileDir, fileName)
 
             try {
                 val outputStream = FileOutputStream(file)
-                bitmap.compress(Bitmap.CompressFormat.JPEG, _compressionLevel.value.toInt(), outputStream)
+                bitmap.compress(
+                    Bitmap.CompressFormat.JPEG,
+                    _compressionLevel.value.toInt(),
+                    outputStream
+                )
                 outputStream.flush()
                 outputStream.close()
                 _status.value = "Image compressed and saved to ${file.absolutePath}"
